@@ -1,0 +1,74 @@
+﻿@using FacebookCoverPhoto.Models
+@model FacebookCoverPhoto.Models.Users
+
+@{
+    ViewBag.Title = "Home Page";
+    dbEntities db = new dbEntities();
+    var users = db.Users.OrderBy(m => m.FirstName);
+}
+
+<div class="body-container">
+    <h1>Facebook Style Cover Photo with ASP.Net MVC</h1>
+    <hr />
+
+    <div id="WallCover" class="wall-cover @(Model.CoverPhotoName == null ? "no-photo" : "")">
+        <div class="photo">
+            <div class="photo-container">
+                <div class="drag-message">Kapağı konumlandırmak için sürükle</div>
+                <div class="uploadProgress">
+                    <div>Lütfen bekleyin...</div>
+                </div>
+                <img class="default-cover-photo" src="@(Model.CoverPhotoName == null ? "" : Url.Content("~/images/c-" + Model.CoverPhotoName))" />
+            </div>
+            <div class="actions">
+                <ul class="chooser">
+                    <li>
+                        <a href="#" class="update"><span>Kapak Fotoğrafını Güncelle</span></a>
+                        <ul class="sub-menu">
+                            <!--<li><a href="#"><i class="icon icon1"></i>Fotoğraflarımdan Seç</a></li>-->
+                            <li><a class="upload" href="#"><i class="icon icon2"></i>Fotoğraf Yükle</a></li>
+                            <li><a class="reposition" href="#"><i class="icon icon3"></i>Yeniden Konumlandır</a></li>
+                            <li><a class="delete" href="#"><i class="icon icon4"></i>Kaldır</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <form method="post" enctype="multipart/form-data" autocomplete="off">
+                <input type="file" name="coverphoto" accept="image/*" />
+            </form>
+        </div>
+        <div class="footer">
+            <div class="user-info">
+                <div class="profile-photo">
+                    <img src="@Url.Content("~/images/" + Model.ProfilePhotoName)" />
+                </div>
+                <div class="user-fullname">
+                    @Model.FullName
+                </div>
+            </div>
+            <div class="actions">
+                <ul class="edit">
+                    <li><a class="uibutton cancel" href="#">İptal</a></li>
+                    <li><a class="uibutton confirm save" href="#">Değişiklikleri Kaydet</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h4>Kullanıcılar</h4>
+        <ul style="margin:0px; padding:0px; list-style:none;">
+            @foreach (var item in users)
+            {
+                <li>
+                    <a href="@Url.Action("Index", "Home", new { Id = item.Id })">@(item.FirstName + " " + item.LastName)</a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <hr />
+    <div style="text-align:center">
+        by <a href="https://www.facebook.com/mehmetemineker" target="_blank">Mehmet Emin Eker</a>
+    </div>
+</div>
